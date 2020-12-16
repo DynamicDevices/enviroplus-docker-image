@@ -1,0 +1,9 @@
+version: '2'
+services:
+  sensors:
+    build: ./sensors
+    privileged: true
+    volumes:
+      - shared-data:/data
+volumes:
+  shared-data:
