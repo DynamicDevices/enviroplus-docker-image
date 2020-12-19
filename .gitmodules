@@ -1,0 +1,3 @@
+[submodule "sensors/enviroplus-python"]
+	path = sensors/enviroplus-python
+	url = git@github.com:DynamicDevices/enviroplus-python.git

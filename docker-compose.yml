@@ -5,5 +5,7 @@ services:
     privileged: true
     volumes:
       - shared-data:/data
+    labels:
+      io.balena.features.kernel-modules: '1'
 volumes:
   shared-data:

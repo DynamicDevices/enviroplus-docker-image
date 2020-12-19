@@ -1,7 +1,10 @@
-#!/bin/sh
+#!/bin/bash
+
+# Load in driver for MEMS microphone
+insmod rpi0-i2s-audio.ko
 
 if [[ -z "${AUTORUN}" ]]; then
  ./sleep.sh
 else
- ./readandpublish.py
+ ./runmqtt.sh
 fi

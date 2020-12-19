@@ -1,0 +1,43 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:buster as build
+
+# Enable OpenRC
+ENV INITSYSTEM on 
+ENV VERSION "2.54.2+rev1.prod"
+
+WORKDIR /usr/src/app
+
+RUN install_packages build-essential wget awscli bc flex libssl-dev bison
+
+COPY build.sh .
+COPY workarounds.sh .
+COPY rpi0-i2s-audio/ ./rpi0-i2s-audio
+RUN ./build.sh build --device %%BALENA_MACHINE_NAME%% --os-version $VERSION --src rpi0-i2s-audio
+RUN find . -type f -name "*.ko" -exec cp {} . \;
+
+#
+# Target image
+#
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-python:buster as target
+
+# Enable OpenRC
+ENV INITSYSTEM on 
+ENV UDEV=on
+
+WORKDIR /usr/src/app
+
+RUN install_packages build-essential git zlib1g-dev libjpeg-dev libfreetype6-dev libffi-dev libportaudio2 alsa-utils
+
+# Fix pip & install needed dependencies
+RUN python3 -m ensurepip && pip install --upgrade pip
+RUN pip3 install -U setuptools RPI.gpio numpy spidev Pillow paho-mqtt smbus smbus2 sounddevice enviroplus
+
+COPY --from=build /usr/src/app/*.ko .
+
+# Pull in Enviroplus examples
+RUN git clone https://github.com/pimoroni/enviroplus-python.git
+
+# Copy our bits and bobs over
+COPY scripts/ .
+
+CMD ./autorun.sh

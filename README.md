@@ -1,0 +1,57 @@
+
+# Balena Docker container for using the Pimoroni Enviro+ board
+
+This should have all needed dependencies and the various examples
+
+You will need to slightly reconfigure your RPi if you are using the particulate sensor as the serial console gets in the way.
+
+If using Balena as your embedded Docker platform you can do something like this
+
+```
+#First disable read-only rootfs:
+mount -o remount,rw /
+
+# Then mask the serial getty service:
+systemctl mask serial-getty@serial0.service
+
+reboot
+```
+
+You also need a couple of device settings for the I2C and I2S bus
+
+- DT parameters needs to be `"i2c_arm=on","spi=on","audio=on","i2s=on"`
+- DT overlays needs to be `pi3-miniuart-bt`
+
+For more details on this see the Pimoroni Enviro+ [repo](https://github.com/pimoroni/enviroplus-python)
+
+## Kernel Module Versioning
+
+Also there is an I2S audio driver which is built specifically against the underlying Linux kernel
+
+Check the BelenaOS version of your installation and change this line in `Dockerfile.template`
+
+`ENV VERSION '2.54.2+rev1.prod'`
+
+This is built and included for this BalenaOS in the `sensors` image. To load in use
+
+```
+insmod rpi0-i2s-audio.ko
+```
+
+To check use
+
+```
+arecord -l
+```
+
+You should see an audio device like this
+
+```
+root@539cd3741a89:/usr/src/app# arecord -l
+**** List of CAPTURE Hardware Devices ****
+card 1: sndrpi0simpleca [snd_rpi0_simple_card], device 0: simple-card_codec_link snd-soc-dummy-dai-0 [simple-card_codec_link snd-soc-dummy-dai-0]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
+```
+
+
