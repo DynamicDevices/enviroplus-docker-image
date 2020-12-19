@@ -1,7 +1,15 @@
 
 # Balena Docker container for using the Pimoroni Enviro+ board
 
-This should have all needed dependencies and the various examples
+The Enviro+ is a lovely little integrated sensor board for the Raspberry Pi series of boards.
+
+![EnviroPlus Picture](https://i.ibb.co/W31YvWr/image.png)
+
+The Pimoroni Getting Started guide is [here](https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-enviro-plus)
+
+## Setup
+
+My container  should have all needed dependencies and the various examples
 
 You will need to slightly reconfigure your RPi if you are using the particulate sensor as the serial console gets in the way.
 
