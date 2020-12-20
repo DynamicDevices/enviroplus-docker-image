@@ -62,4 +62,14 @@ card 1: sndrpi0simpleca [snd_rpi0_simple_card], device 0: simple-card_codec_link
   Subdevice #0: subdevice #0
 ```
 
+## Environment Variables
+
+There's a `sensors` container that runs up. This starts `autorun.sh` which checks for an `AUTORUN` environment variable. If this isn't present it loops over a sleep function which allows you to debug. Otherwise the container would exit. With this set it runs a `runmqtt.sh` script which currently runs the default Pimoroni `mqtt-all.py` script with parameters on the command-line
+
+| Environment Variable | Description |
+| -------------------- | ----------- |
+| AUTORUN              | If present we start the main task, otherwise sleep |
+| MQTT_BROKER          | MQTT broker host to which to publish data |
+| MQTT_PORT            | MQTT broker port |
+| MQTT_TOPIC           | MQTT topic we publish to |
 
