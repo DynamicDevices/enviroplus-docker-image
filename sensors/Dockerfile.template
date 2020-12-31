@@ -36,7 +36,7 @@ COPY --from=build /usr/src/app/*.ko .
 
 # Pull in Enviroplus examples
 RUN echo Pull repo...
-RUN git clone https://github.com/DynamicDevices/enviroplus-python.git
+RUN git clone https://github.com/DynamicDevices/enviroplus-python.git && cd enviroplus-python && git checkout 8d331d861a06764ad3bd216d17e4141e9f94d91e
 
 # Copy our bits and bobs over
 COPY scripts/ .
