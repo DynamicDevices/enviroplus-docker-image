@@ -32,6 +32,32 @@ You also need a couple of device settings for the I2C and I2S bus
 
 For more details on this see the Pimoroni Enviro+ [repo](https://github.com/pimoroni/enviroplus-python)
 
+## Setup Problems downloading container update [Solved]
+
+On the Pi Zero it can take a while to extract container images, particularly if they are quite large.
+
+What can then happen is that a Balena watchdog can then timeout and restart the download, so you end up downloading over and over (quite frustrating!)
+
+See the conversation [here](https://forums.balena.io/t/persistent-failed-to-download-image-due-to-connect-econnrefused-var-run-balena-engine-sock-error/114001/57) where I investigated this.
+
+To resolve you need to edit the timeout on the watchdog and to do this you need to open a terminal in the Host OS, then:
+
+```
+# First disable read-only rootfs:
+mount -o remount,rw /
+
+# Edit the service
+vi /etc/systemd/system/balena-engine.service
+
+# Change Watchdog Sec in that file to increase it...
+WatchdogSec=3600
+
+# Remount ro
+mount -o remount,ro /
+
+reboot
+```
+
 ## Kernel Module Versioning
 
 Also there is an I2S audio driver which is built specifically against the underlying Linux kernel
