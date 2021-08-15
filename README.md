@@ -32,6 +32,24 @@ You also need a couple of device settings for the I2C and I2S bus
 
 For more details on this see the Pimoroni Enviro+ [repo](https://github.com/pimoroni/enviroplus-python)
 
+### Add USB gadget support
+
+First you must have the "dwc2" overlay setup as above.
+
+Then open a terminal to the host OS and:
+
+```
+mount -o remount,rw /
+
+echo "g_ether" > /etc/modules-load.d/g_ether.conf
+
+mount -o remount,ro /
+
+reboot
+```
+
+This will load the ethernet gadget on boot. You can test this by connecting to a host system and on Linux you should see a new USB ethernet device
+
 ## Setup Problems downloading container update [Solved]
 
 On the Pi Zero it can take a while to extract container images, particularly if they are quite large.
